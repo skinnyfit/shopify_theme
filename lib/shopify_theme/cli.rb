@@ -161,8 +161,16 @@ module ShopifyTheme
     end
 
     def errors_from_response(response)
-      if response.parsed_response
-        response.parsed_response["errors"] ? response.parsed_response["errors"].values.join(", ") : ""
+      return unless response.parsed_response
+
+      errors = response.parsed_response["errors"]
+
+      if errors.nil?
+        ''
+      elsif errors.respond_to?(:values)
+        errors.values.join(", ")
+      else
+        errors
       end
     end
   end
